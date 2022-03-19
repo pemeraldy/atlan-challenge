@@ -1,9 +1,14 @@
 <script setup>
-import IconCells from './components/icons/IconCells.vue'
+import { ref } from "vue";
+import IconCells from "./components/icons/IconCells.vue";
+import QueryHandler from "./components/QueryHandler.vue";
+import MenuComponent from "./components/MenuComponent.vue";
+
+const listItems = ref(["Sieved", "Long"]);
 </script>
 
 <template>
-  <div class="flex justify-center bg-blue-800 p-5 w-screen min-h-screen">
+  <div class="flex justify-center bg-[#1913ae] p-5 w-screen min-h-screen">
     <main class="bg-white w-full overflow-hidden min-h-full rounded-2xl">
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
@@ -69,40 +74,39 @@ import IconCells from './components/icons/IconCells.vue'
         <!-- sidebar -->
         <div class="sm:w-[250px] border-r border-gray-300">
           <div class="flex flex-col items-center">
-            <ul class="w-full pl-4">
-              <h2
-                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold w-full"
-              >
-                Tables
-              </h2>
-              <li v-for="i in 3" :key="i" class=" cursor-pointer pl-4  py-2 flex items-center">
-                <span class="inline-block w-4 h-4">
-                  <IconCells />
-                </span>
-                <span class="ml-2 text-xs text-gray-700 font-medium">Customers</span>
-              </li>
-            </ul>
+            <MenuComponent
+              menu-heading="Tables"
+              :list-items="['Agents', 'Products', 'Customers']"
+            >
+              <template #icon>
+                <IconCells />
+              </template>
+            </MenuComponent>
+
             <!-- Saved queries -->
-            <ul class="w-full pl-4 mt-4">
-              <h2
-                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold w-full"
-              >
-                Saved Queries
-              </h2>
-              <li v-for="i in 3" :key="i" class="cursor-pointer pl-4 py-2 flex items-center">
-                <span class=" py-[2px] px-[3px] rounded text-[8px] font-semibold bg-orange-500 text-white"
+            <MenuComponent
+              menu-heading="Saved Queries"
+              :list-items="['Agents', 'Products', 'Customers']"
+            >
+              <template #icon>
+                <span
+                  class="py-[2px] px-[3px] rounded text-[8px] font-semibold bg-orange-500 text-white"
                   >SQL</span
                 >
-                <span class="ml-2 text-xs text-gray-700 font-medium"
-                  >All sold products</span
-                >
-              </li>
-            </ul>
+              </template>
+            </MenuComponent>
+
+            <MenuComponent :listItems="listItems" menu-heading="New Menu">
+              <template #icon>
+                <IconCells />
+              </template>
+            </MenuComponent>
           </div>
         </div>
+
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <h1>Rest content</h1>
+          <QueryHandler />
         </div>
       </div>
     </main>
