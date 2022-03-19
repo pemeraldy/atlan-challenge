@@ -1,5 +1,5 @@
 <template>
-  <div class="sm:h-[300px] bg-red-200">
+  <div class="sm:h-[200px] bg-red-200">
     <textarea class="w-full h-full" v-model="queryContent"></textarea>
   </div>
 </template>
