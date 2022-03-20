@@ -3,6 +3,8 @@ import { ref } from "vue";
 import IconCells from "./components/icons/IconCells.vue";
 import QueryHandler from "./components/QueryHandler.vue";
 import MenuComponent from "./components/MenuComponent.vue";
+import TableComponent from "./components/TableComponent.vue";
+import IconCheck from "./components/icons/IconCheck.vue";
 
 const listItems = ref(["Sieved", "Long"]);
 </script>
@@ -107,6 +109,20 @@ const listItems = ref(["Sieved", "Long"]);
         <!-- rest content -->
         <div class="flex-1 bg-white">
           <QueryHandler />
+          <div class="border-b sm:mt-16 border-gray-200">
+            <div class="flex items-center">
+              <span class="text-green-400 ml-3">
+                <IconCheck />
+              </span>
+              <span
+                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"
+                >Query Results</span
+              >
+            </div>
+          </div>
+          <div>
+            <TableComponent />
+          </div>
         </div>
       </div>
     </main>
