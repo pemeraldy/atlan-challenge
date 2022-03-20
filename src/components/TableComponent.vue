@@ -1,10 +1,20 @@
 <script setup>
+import { onMounted, computed } from 'vue'
 const props = defineProps({
-  headers: {
+  tableHeaders: {
     type: Array,
     default: () => ["Product Name", "Category", "Price", "Action"],
   },
+  tableData: {
+    type: Array,
+    default: () => []
+  }
 });
+const compheaderData = computed(() => props.tableHeaders)
+    console.log(compheaderData.value)    
+  onMounted(() => {
+    console.log(props.tableHeaders)    
+  })
 </script>
 
 <template>
@@ -17,7 +27,7 @@ const props = defineProps({
               <thead class="bg-gray-100">
                 <tr>
                   <th
-                    v-for="(title, index) in props.headers"
+                    v-for="(title, index) in props.tableHeaders"
                     :key="`${header}_${index}`"
                     scope="col"
                     class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase"
@@ -27,7 +37,8 @@ const props = defineProps({
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr class="hover:bg-gray-100">
+                <!-- v-for="o in 100" :key="o" -->
+                <tr  class="hover:bg-gray-100">
                   <td
                     class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap"
                   >

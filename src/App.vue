@@ -7,11 +7,15 @@ import TableComponent from "./components/TableComponent.vue";
 import IconCheck from "./components/icons/IconCheck.vue";
 
 const listItems = ref(["Sieved", "Long"]);
+let tableHeaders = ref(['Head1', 'Head2', 'Head2','Head4'])
+const updateHeaders = () => {
+  tableHeaders.value = ["Product Name", "Category", "Price", "Action"]
+}
 </script>
 
 <template>
   <div class="flex justify-center bg-[#1913ae] p-5 w-screen min-h-screen">
-    <main class="bg-white w-full overflow-hidden min-h-full rounded-2xl">
+    <main class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl">
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
           <svg
@@ -116,12 +120,14 @@ const listItems = ref(["Sieved", "Long"]);
               </span>
               <span
                 class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"
+                @click="updateHeaders"
                 >Query Results</span
               >
             </div>
           </div>
-          <div>
-            <TableComponent />
+          <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
+          <div class=" ">
+            <TableComponent :table-headers="tableHeaders" />
           </div>
         </div>
       </div>
