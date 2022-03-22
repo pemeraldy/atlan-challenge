@@ -10,9 +10,12 @@ import IconCheck from "./components/icons/IconCheck.vue";
 import { customers } from "../data/customers";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
+import AtlanLogo from "./components/icons/AtlanLogo.vue";
+import BurgerMenu from "./components/icons/BurgerMenu.vue";
 const alltables = [customers, categories, products];
 const tablesInMenu = ref(["Categories", "Customers", "Products"]);
 let selectedTable = ref(null);
+const sideMenuVisible = ref(true);
 const loadedTable = computed(() => {
   if (!selectedTable.value) return [];
   return selectedTable.value;
@@ -47,7 +50,7 @@ const savedQueryMenuTitles = computed(() => {
 const handleTables = (e) => {
   isRunningQuery.value = true;
   setTimeout(() => {
-    setSelectedTable(e.index);    
+    setSelectedTable(e.index);
     isRunningQuery.value = false;
   }, 300);
 };
@@ -68,84 +71,56 @@ const runQuery = () => {
     }
   }, 200);
 };
+
+const showEditor = ref(true)
+const showTable = ref(true)
+
+const toggleTable = () => {
+  showEditor.value = false
+  showTable.value = true
+}
+const toggleEditor = () => {
+  showEditor.value = true
+  showTable.value = false
+}
+
 // lifecycle hooks
 onMounted(() => {
-  // console.log(alltables);
   // if saved queries are available, load the first
   if (savedQueryMenuTitles.value.length > 0) {
     currentQueryInEditor.value = savedQueries[0].queryContent;
+  }
+  if (window.innerWidth < 700) {
+    sideMenuVisible.value = false;
+    toggleEditor()
   }
 });
 </script>
 
 <template>
-  <div class="flex justify-center bg-[#1913ae] p-5 w-screen min-h-screen">
+  <div
+    class="flex justify-center bg-gray-50 sm:bg-[#1913ae] sm:p-5 overflow-hidden w-screen min-h-screen"
+  >
     <main
       class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl"
     >
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
-          <svg
-            viewBox="0 0 233.21 72.63"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-          >
-            <pattern
-              id="a"
-              height="90.53"
-              patternTransform="translate(-1538.09 2155.25)"
-              patternUnits="userSpaceOnUse"
-              viewBox="0 0 90.53 90.53"
-              width="90.53"
-            >
-              <path d="m0 0h90.53v90.53h-90.53z" fill="none" />
-              <path d="m0 0h90.53v90.53h-90.53z" fill="#2026d2" />
-            </pattern>
-            <pattern
-              id="b"
-              height="90.53"
-              patternTransform="translate(-1538.09 2155.25)"
-              patternUnits="userSpaceOnUse"
-              viewBox="0 0 90.53 90.53"
-              width="90.53"
-            >
-              <path d="m0 0h90.53v90.53h-90.53z" fill="none" />
-              <path d="m0 0h90.53v90.53h-90.53z" fill="#62e1fc" />
-            </pattern>
-            <pattern
-              id="c"
-              height="90.53"
-              patternTransform="translate(-89.58 2115.25)"
-              patternUnits="userSpaceOnUse"
-              viewBox="0 0 90.53 90.53"
-              width="90.53"
-            >
-              <path d="m0 0h90.53v90.53h-90.53z" fill="none" />
-              <path d="m0 0h90.53v90.53h-90.53z" fill="#62e1fc" />
-            </pattern>
-            <g fill="url(#a)">
-              <path
-                d="m52.52 22.45v48.82h-14.64v-4.59c-3.22 3.71-8 5.95-14.55 5.95-12.79 0-23.33-11.22-23.33-25.77s10.54-25.77 23.33-25.77c6.54 0 11.33 2.24 14.55 5.95v-4.59zm-14.64 24.41c0-7.32-4.88-11.86-11.62-11.86s-11.62 4.54-11.62 11.86 4.89 11.91 11.62 11.91 11.62-4.59 11.62-11.91z"
-              />
-              <path
-                d="m81.8 36.51v17.28c0 4.2 3.62 4.59 10.06 4.2v13.28c-19.13 2-24.7-3.81-24.7-17.48v-17.28h-7.81v-14.06h7.81v-9.27l14.64-4.39v13.66h10.06v14.06z"
-              />
-              <path d="m100.15 0h14.65v71.27h-14.65z" />
-              <path
-                d="m175.62 22.45v48.82h-14.62v-4.59c-3.22 3.71-8 5.95-14.54 5.95-12.79 0-23.34-11.22-23.34-25.77s10.55-25.77 23.34-25.77c6.54 0 11.32 2.24 14.54 5.95v-4.59zm-14.62 24.41c0-7.32-4.91-11.86-11.64-11.86s-11.62 4.59-11.62 11.91 4.88 11.91 11.62 11.91 11.64-4.64 11.64-11.96z"
-              />
-              <path
-                d="m233.21 41.3v30h-14.64v-27.86c0-6-3.81-8.88-8.5-8.88-5.37 0-9.08 3.12-9.08 10.06v26.65h-14.64v-48.82h14.65v4.55c2.64-3.61 7.52-5.95 14-5.95 9.81.04 18.21 7.07 18.21 20.25z"
-              />
-            </g>
-            <circle cx="26.26" cy="46.86" fill="url(#b)" r="6" />
-            <circle cx="149.36" cy="46.86" fill="url(#c)" r="6" />
-          </svg>
+          <AtlanLogo />
         </a>
+        <button
+          @click="sideMenuVisible = !sideMenuVisible"
+          class="text-[#1913ae] sm:hidden"
+        >
+          <BurgerMenu />
+        </button>
       </nav>
       <div class="flex bg-gray-50 h-full">
         <!-- sidebar -->
-        <div class="sm:w-[250px] sm:max-w-[250px] border-r border-gray-300">
+        <div
+          v-if="sideMenuVisible"
+          class="sm:block sm:w-[250px] sm:max-w-[250px] border-r border-gray-300"
+        >
           <div class="flex flex-col items-center">
             <MenuComponent
               menu-heading="Tables"
@@ -175,21 +150,24 @@ onMounted(() => {
 
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <QueryHandler @runQuery="runQuery" :query="currentQueryInEditor" />
-          <div class="border-b sm:mt-16 border-gray-200">
+          <QueryHandler
+            v-if="showEditor"
+            @runQuery="runQuery"
+            :query="currentQueryInEditor"
+          />
+          <div v-if="showTable" class="border-b sm:mt-16 border-gray-200">
             <div class="flex items-center">
               <span class="text-green-400 ml-3">
                 <IconCheck />
               </span>
               <span
-                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"
-                @click="updateHeaders"
+                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"                
                 >Query Results</span
               >
             </div>
           </div>
           <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
-          <div class="overflow-hidden">
+          <div v-if="showTable" class="overflow-hidden">
             <TableComponent
               :loadingQuery="isRunningQuery"
               :tableData="loadedTable"
