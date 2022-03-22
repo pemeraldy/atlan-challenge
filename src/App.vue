@@ -209,7 +209,7 @@ onMounted(() => {
             leave-to-class="transform opacity-0"
           >
             <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
-            <div v-if="showTable" class="overflow-hidden">
+            <div v-if="showTable" class="overflow-hidden h-full">
               <TableComponent
                 :loadingQuery="isRunningQuery"
                 :tableData="loadedTable"
