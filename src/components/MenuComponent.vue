@@ -21,7 +21,7 @@
             >SQL</span
           >
         </slot>
-        <span class="ml-2 text-xs text-gray-700 font-medium truncate">{{ item }}</span>
+        <span class="ml-2 text-xs w-3/4 text-gray-700 font-medium truncate">{{ item }}</span>
       </li>
     </slot>
   </ul>
