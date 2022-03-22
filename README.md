@@ -21,7 +21,7 @@ This was calculated using two methods:
 -  Using an online [tool ](https://pagespeed.web.dev/report?url=https%3A%2F%2Ffrosty-jang-2c102f.netlify.app%2F)
 
 ## Performance Issue 
-Initially having to render a large amount of data on the table was indeed a costly task for the browser to paint that amount of dom elements, rendering a row of about 200000 will definitely cause a browser running on a strong CPU to lag if not crashing the browser tab.
+Initially having to render a large amount of data on the table was indeed a costly task for the browser to paint that amount of dom elements, rendering a row of about 2000000 will definitely cause a browser running on a strong CPU to lag if not crashing the browser tab.
 
 ## Solution
 The solution to this is to implement a virtual scrolling mechanism for that portion of the DOM to ensure that only the data that can be seen on the screen per time are rendered, well I had started writing a Custom component to do that, but trying optimize and testing to be sure that this plugin/component will do the job accurately was going to take a lot of time so I decided to look for existing tools already built to solve this issue.
@@ -31,7 +31,8 @@ This led to me opting for a more robust package [vue-ag-grid](https://www.ag-gri
 
 
 Page speed without optimization
-<image src="../assets/imgs/perfomance/slowload.PNG"> </image>
+![without optimization](../assets/imgs/perfomance/slowload.PNG)
+<!-- <image src="../assets/imgs/perfomance/slowload.PNG"> </image> -->
 LightHouse result without optimization
 <image src="../assets/imgs/perfomance/slow-state-2.PNG"> </image>
 Page speed with optimization
