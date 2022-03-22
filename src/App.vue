@@ -10,6 +10,13 @@ import IconCheck from "./components/icons/IconCheck.vue";
 import { customers } from "../data/customers";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
+const alltables = [customers, categories, products];
+const tablesInMenu = ref(["Categories", "Customers", "Products"]);
+let selectedTable = ref(null);
+const loadedTable = computed(() => {
+  if (!selectedTable.value) return [];
+  return selectedTable.value;
+});
 // Sample Saved queries
 const savedQueries = reactive([
   {
@@ -36,13 +43,34 @@ const savedQueryMenuTitles = computed(() => {
   return savedQueries.map((item) => item.name);
 });
 
-
-const tablesInMenu = ref(["Categories", "Customers", "Products"]);
-const loadQuery = (e) => {
-  currentQueryInEditor.value = savedQueries[e.index].queryContent
-  // console.log( savedQueries[e.index].queryContent);
+// Functions
+const handleTables = (e) => {
+  isRunningQuery.value = true;
+  setTimeout(() => {
+    setSelectedTable(e.index);    
+    isRunningQuery.value = false;
+  }, 300);
 };
+const setSelectedTable = (index) => {
+  selectedTable.value = alltables[index];
+};
+const loadQuery = (e) => {
+  currentQueryInEditor.value = savedQueries[e.index].queryContent;
+};
+
+const isRunningQuery = ref(false);
+const runQuery = () => {
+  isRunningQuery.value = true;
+  setTimeout(() => {
+    isRunningQuery.value = false;
+    if (!selectedTable.value) {
+      selectedTable.value = alltables[0];
+    }
+  }, 200);
+};
+// lifecycle hooks
 onMounted(() => {
+  // console.log(alltables);
   // if saved queries are available, load the first
   if (savedQueryMenuTitles.value.length > 0) {
     currentQueryInEditor.value = savedQueries[0].queryContent;
@@ -52,7 +80,9 @@ onMounted(() => {
 
 <template>
   <div class="flex justify-center bg-[#1913ae] p-5 w-screen min-h-screen">
-    <main class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl">
+    <main
+      class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl"
+    >
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
           <svg
@@ -117,7 +147,11 @@ onMounted(() => {
         <!-- sidebar -->
         <div class="sm:w-[250px] sm:max-w-[250px] border-r border-gray-300">
           <div class="flex flex-col items-center">
-            <MenuComponent menu-heading="Tables" :list-items="tablesInMenu">
+            <MenuComponent
+              menu-heading="Tables"
+              :list-items="tablesInMenu"
+              @handle-actions="handleTables"
+            >
               <template #icon>
                 <IconCells />
               </template>
@@ -127,7 +161,7 @@ onMounted(() => {
             <MenuComponent
               menu-heading="Saved Queries"
               :list-items="savedQueryMenuTitles"
-              @set-item="loadQuery"
+              @handle-actions="loadQuery"
             >
               <template #icon>
                 <span
@@ -141,7 +175,7 @@ onMounted(() => {
 
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <QueryHandler :query="currentQueryInEditor" />
+          <QueryHandler @runQuery="runQuery" :query="currentQueryInEditor" />
           <div class="border-b sm:mt-16 border-gray-200">
             <div class="flex items-center">
               <span class="text-green-400 ml-3">
@@ -155,8 +189,11 @@ onMounted(() => {
             </div>
           </div>
           <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
-          <div class=" ">
-            <!-- <TableComponent :table-headers="tableHeaders" /> -->
+          <div class="overflow-hidden">
+            <TableComponent
+              :loadingQuery="isRunningQuery"
+              :tableData="loadedTable"
+            />
           </div>
         </div>
       </div>
