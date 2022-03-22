@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { computed } from "vue";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -26,15 +26,6 @@ const compheaderData = computed(() => {
       field: title,
     };
   });
-});
-const computedTableHeight = ref("301px");
-const wrapTable = ref(null)
-// const sideMenuVisible = ref(true)
-onMounted(() => {
-  console.log("Ref::", wrapTable.value);
-  if (window.innerWidth < 700) {
-    computedTableHeight.value = `${window.innerHeight - 90}px`;
-  }
 });
 </script>
 
