@@ -1,16 +1,52 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed, reactive } from "vue";
 import IconCells from "./components/icons/IconCells.vue";
 import QueryHandler from "./components/QueryHandler.vue";
 import MenuComponent from "./components/MenuComponent.vue";
 import TableComponent from "./components/TableComponent.vue";
 import IconCheck from "./components/icons/IconCheck.vue";
 
-const listItems = ref(["Sieved", "Long"]);
-let tableHeaders = ref(['Head1', 'Head2', 'Head2','Head4'])
-const updateHeaders = () => {
-  tableHeaders.value = ["Product Name", "Category", "Price", "Action"]
-}
+// Data
+import { customers } from "../data/customers";
+import { categories } from "../data/categories";
+import { products } from "../data/products";
+
+// Sample Saved queries
+const savedQueries = reactive([
+  {
+    name: "query active categories",
+    queryContent: `select 
+	categoryID, categoryName, description
+from tables.categories
+where 
+	status = 'active'`,
+  },
+  {
+    name: "Reordered products",
+    queryContent: `select 
+	productID, productName, quantityPerUnit, unitPrice, reorderLevel
+from tables.products
+where 
+	reorderLevel > 10`,
+  },
+]);
+const savedQueryMenuTitles = computed(() => {
+  return savedQueries.map((item) => item.name);
+});
+
+let currentQueryInEditor = ref("");
+
+const tablesInMenu = ref(["Categories", "Customers", "Products"]);
+const loadQuery = (e) => {
+  currentQueryInEditor.value = savedQueries[e.index].queryContent
+  // console.log( savedQueries[e.index].queryContent);
+};
+onMounted(() => {
+  if (savedQueryMenuTitles.value.length > 0) {
+    currentQueryInEditor.value = savedQueries[0].queryContent;
+  console.log(savedQueryMenuTitles.value.length,savedQueries[0]);
+  }
+});
 </script>
 
 <template>
@@ -78,12 +114,9 @@ const updateHeaders = () => {
       </nav>
       <div class="flex bg-gray-50 h-full">
         <!-- sidebar -->
-        <div class="sm:w-[250px] border-r border-gray-300">
+        <div class="sm:w-[250px] sm:max-w-[250px] border-r border-gray-300">
           <div class="flex flex-col items-center">
-            <MenuComponent
-              menu-heading="Tables"
-              :list-items="['Agents', 'Products', 'Customers']"
-            >
+            <MenuComponent menu-heading="Tables" :list-items="tablesInMenu">
               <template #icon>
                 <IconCells />
               </template>
@@ -92,7 +125,8 @@ const updateHeaders = () => {
             <!-- Saved queries -->
             <MenuComponent
               menu-heading="Saved Queries"
-              :list-items="['Agents', 'Products', 'Customers']"
+              :list-items="savedQueryMenuTitles"
+              @set-item="loadQuery"
             >
               <template #icon>
                 <span
@@ -101,18 +135,12 @@ const updateHeaders = () => {
                 >
               </template>
             </MenuComponent>
-
-            <MenuComponent :listItems="listItems" menu-heading="New Menu">
-              <template #icon>
-                <IconCells />
-              </template>
-            </MenuComponent>
           </div>
         </div>
 
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <QueryHandler />
+          <QueryHandler :query="currentQueryInEditor" />
           <div class="border-b sm:mt-16 border-gray-200">
             <div class="flex items-center">
               <span class="text-green-400 ml-3">
@@ -127,7 +155,7 @@ const updateHeaders = () => {
           </div>
           <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
           <div class=" ">
-            <TableComponent :table-headers="tableHeaders" />
+            <!-- <TableComponent :table-headers="tableHeaders" /> -->
           </div>
         </div>
       </div>
