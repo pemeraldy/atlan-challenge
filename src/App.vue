@@ -10,7 +10,6 @@ import IconCheck from "./components/icons/IconCheck.vue";
 import { customers } from "../data/customers";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
-
 // Sample Saved queries
 const savedQueries = reactive([
   {
@@ -30,11 +29,13 @@ where
 	reorderLevel > 10`,
   },
 ]);
+
+let currentQueryInEditor = ref("");
+
 const savedQueryMenuTitles = computed(() => {
   return savedQueries.map((item) => item.name);
 });
 
-let currentQueryInEditor = ref("");
 
 const tablesInMenu = ref(["Categories", "Customers", "Products"]);
 const loadQuery = (e) => {
@@ -42,9 +43,9 @@ const loadQuery = (e) => {
   // console.log( savedQueries[e.index].queryContent);
 };
 onMounted(() => {
+  // if saved queries are available, load the first
   if (savedQueryMenuTitles.value.length > 0) {
     currentQueryInEditor.value = savedQueries[0].queryContent;
-  console.log(savedQueryMenuTitles.value.length,savedQueries[0]);
   }
 });
 </script>

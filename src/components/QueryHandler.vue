@@ -3,8 +3,8 @@
     <!-- :options="editorOptions" -->
     <VCodeMirror class="w-full h-full" :mode="mode" :value="props.query" />
     <div class="absolute px-3 flex -bottom-12">
-      <button class="text-white font-medium rounded hover:bg-blue-800 transition-all duration-300 bg-blue-600 p-2">Run Query</button>
-      <button class="text-white font-medium rounded ml-3 bg-green-400 p-2">
+      <button class="text-white font-medium rounded transition-all duration-300 hover:bg-blue-800  bg-blue-600 p-2">Run Query</button>
+      <button class="text-white font-medium rounded ml-3 transition-all duration-300 hover:bg-green-500 bg-green-400 p-2">
         Save Query
       </button>
     </div>
