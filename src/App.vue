@@ -12,13 +12,16 @@ import { categories } from "../data/categories";
 import { products } from "../data/products";
 import AtlanLogo from "./components/icons/AtlanLogo.vue";
 import BurgerMenu from "./components/icons/BurgerMenu.vue";
+import TableIcon from "./components/icons/TableIcon.vue";
+import CodeIcon from "./components/icons/CodeIcon.vue";
+import PlayIcon from "./components/icons/PlayIcon.vue";
 const alltables = [customers, categories, products];
 const tablesInMenu = ref(["Categories", "Customers", "Products"]);
 let selectedTable = ref(null);
 const sideMenuVisible = ref(true);
-const isMobile = computed(() =>{
-  return window.innerWidth < 700
-})
+const isMobile = computed(() => {
+  return window.innerWidth < 700;
+});
 const loadedTable = computed(() => {
   if (!selectedTable.value) return [];
   return selectedTable.value;
@@ -71,24 +74,26 @@ const runQuery = () => {
     isRunningQuery.value = false;
     if (!selectedTable.value) {
       selectedTable.value = alltables[0];
-      if(window.innerWidth < 700){
-        toggleTable()
+      if (isMobile.value < 700) {
+        toggleTable();
       }
     }
   }, 200);
 };
 
-const showEditor = ref(true)
-const showTable = ref(true)
+const showEditor = ref(true);
+const showTable = ref(true);
 
 const toggleTable = () => {
-  showEditor.value = false
-  showTable.value = true
-}
+  showEditor.value = false;
+  showTable.value = true;
+  if (sideMenuVisible.value) sideMenuVisible.value = false;
+};
 const toggleEditor = () => {
-  showEditor.value = true
-  showTable.value = false
-}
+  showEditor.value = true;
+  showTable.value = false;
+  if (sideMenuVisible.value) sideMenuVisible.value = false;
+};
 
 // lifecycle hooks
 onMounted(() => {
@@ -98,7 +103,7 @@ onMounted(() => {
   }
   if (window.innerWidth < 700) {
     sideMenuVisible.value = false;
-    toggleEditor()
+    toggleEditor();
   }
 });
 </script>
@@ -108,7 +113,7 @@ onMounted(() => {
     class="flex justify-center bg-gray-50 sm:bg-[#1913ae] sm:p-5 overflow-hidden w-screen min-h-screen"
   >
     <main
-      class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl"
+      class="bg-white w-full overflow-hidden min-h-full max-h-full sm:rounded-2xl"
     >
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
@@ -167,7 +172,7 @@ onMounted(() => {
                 <IconCheck />
               </span>
               <span
-                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"                
+                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"
                 >Query Results</span
               >
             </div>
@@ -182,11 +187,41 @@ onMounted(() => {
         </div>
       </div>
     </main>
-    <div v-if="isMobile" class="flex fixed bottom-0 py-2 px-4 w-full flex justify-between bg-gray-50">
-      <button @click="toggleTable" :class="[showTable ? 'text-[#1913a3]' : 'text-gray-400']" class="px-2 py-1 font-medium">Tables</button>
-      <button @click="toggleEditor" :class="[showEditor ? 'text-[#1913a3]' : 'text-gray-400']" class=" px-2 py-1 font-medium">Query</button>
-      <button @click="runQuery"  class=" text-green-600 px-2 py-1 font-medium">Run Query</button>
-
+    <div
+      v-if="isMobile"
+      class="flex fixed bottom-0 py-2 px-5 w-full flex justify-between bg-transparent"
+    >
+      <div class="w-full bg-gray-50 rounded-sm flex justify-between">
+      <button
+        @click="toggleTable"
+        :class="[showTable ? 'text-[#1913a3]' : 'text-gray-400']"
+        class="flex flex-col items-center justify-center px-2 py-1 font-medium"
+      >
+        <span>
+          <TableIcon />
+        </span>
+        <span class="text-xs">Tables</span>
+      </button>
+      <button
+        @click="toggleEditor"
+        :class="[showEditor ? 'text-[#1913a3]' : 'text-gray-400']"
+        class="flex flex-col items-center justify-center px-2 py-1 font-medium"
+      >
+        <span>
+          <CodeIcon />
+        </span>
+        <span class="text-xs">Query</span>
+      </button>
+      <button
+        @click="runQuery"
+        class="flex flex-col justify-center items-center text-green-600 px-2 py-1 font-medium"
+      >
+        <span>
+          <PlayIcon />
+        </span>
+        <span class="text-xs"> Run Query </span>
+      </button>
+      </div>
     </div>
   </div>
 </template>
