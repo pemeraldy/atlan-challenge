@@ -28,8 +28,10 @@ const compheaderData = computed(() => {
   });
 });
 const computedTableHeight = ref("301px");
+const wrapTable = ref(null)
 // const sideMenuVisible = ref(true)
 onMounted(() => {
+  console.log("Ref::", wrapTable.value);
   if (window.innerWidth < 700) {
     computedTableHeight.value = `${window.innerHeight - 90}px`;
   }
@@ -37,40 +39,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative">
-    <!-- <div class="container flex justify-center mx-aut max-h-96">
-      <div class="flex flex-col w-full overflow-auto">
-        <div class="w-full">
-          <div class="border-b border-gray-200 shadow">
-            <table class="w-full">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="px-6 py-2 text-xs text-gray-500">ID</th>
-                  <th class="px-6 py-2 text-xs text-gray-500">Name</th>
-                  <th class="px-6 py-2 text-xs text-gray-500">Email</th>
-                  <th class="px-6 py-2 text-xs text-gray-500">Created_at</th>
-                  <th class="px-6 py-2 text-xs text-gray-500">Edit</th>
-                  <th class="px-6 py-2 text-xs text-gray-500">Delete</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white">
-                <tr v-for="(data,index) in tableData" :key="index" class="whitespace-nowrap">
-                  <td
-                    v-for="(item, index) in data" :key="index"
-                    class="px-6 py-4 text-sm text-gray-500"
-                  >
-                    {{ item }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div> -->
+  <div ref="wrapTable" class="relative h-full">
+
     <ag-grid-vue
-      :style="`width: 100%; height: ${computedTableHeight}`"
-      class="ag-theme-alpine"
+      :style="`width: 100%; height: 100%;`"
+      class="ag-theme-alpine h-full"
       :columnDefs="compheaderData"
       :rowData="tableData"
       overlayNoRowsTemplate="No data loaded yet, please select a table from left menu "
