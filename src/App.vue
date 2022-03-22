@@ -1,15 +1,58 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, computed, reactive } from "vue";
 import IconCells from "./components/icons/IconCells.vue";
 import QueryHandler from "./components/QueryHandler.vue";
 import MenuComponent from "./components/MenuComponent.vue";
+import TableComponent from "./components/TableComponent.vue";
+import IconCheck from "./components/icons/IconCheck.vue";
 
-const listItems = ref(["Sieved", "Long"]);
+// Data
+import { customers } from "../data/customers";
+import { categories } from "../data/categories";
+import { products } from "../data/products";
+// Sample Saved queries
+const savedQueries = reactive([
+  {
+    name: "query active categories",
+    queryContent: `select 
+	categoryID, categoryName, description
+from tables.categories
+where 
+	status = 'active'`,
+  },
+  {
+    name: "Reordered products",
+    queryContent: `select 
+	productID, productName, quantityPerUnit, unitPrice, reorderLevel
+from tables.products
+where 
+	reorderLevel > 10`,
+  },
+]);
+
+let currentQueryInEditor = ref("");
+
+const savedQueryMenuTitles = computed(() => {
+  return savedQueries.map((item) => item.name);
+});
+
+
+const tablesInMenu = ref(["Categories", "Customers", "Products"]);
+const loadQuery = (e) => {
+  currentQueryInEditor.value = savedQueries[e.index].queryContent
+  // console.log( savedQueries[e.index].queryContent);
+};
+onMounted(() => {
+  // if saved queries are available, load the first
+  if (savedQueryMenuTitles.value.length > 0) {
+    currentQueryInEditor.value = savedQueries[0].queryContent;
+  }
+});
 </script>
 
 <template>
   <div class="flex justify-center bg-[#1913ae] p-5 w-screen min-h-screen">
-    <main class="bg-white w-full overflow-hidden min-h-full rounded-2xl">
+    <main class="bg-white w-full overflow-hidden min-h-full max-h-full rounded-2xl">
       <nav class="flex justify-between border-b border-gray-300 p-4">
         <a href="#" class="inline-block w-20 h-6">
           <svg
@@ -72,12 +115,9 @@ const listItems = ref(["Sieved", "Long"]);
       </nav>
       <div class="flex bg-gray-50 h-full">
         <!-- sidebar -->
-        <div class="sm:w-[250px] border-r border-gray-300">
+        <div class="sm:w-[250px] sm:max-w-[250px] border-r border-gray-300">
           <div class="flex flex-col items-center">
-            <MenuComponent
-              menu-heading="Tables"
-              :list-items="['Agents', 'Products', 'Customers']"
-            >
+            <MenuComponent menu-heading="Tables" :list-items="tablesInMenu">
               <template #icon>
                 <IconCells />
               </template>
@@ -86,7 +126,8 @@ const listItems = ref(["Sieved", "Long"]);
             <!-- Saved queries -->
             <MenuComponent
               menu-heading="Saved Queries"
-              :list-items="['Agents', 'Products', 'Customers']"
+              :list-items="savedQueryMenuTitles"
+              @set-item="loadQuery"
             >
               <template #icon>
                 <span
@@ -95,18 +136,28 @@ const listItems = ref(["Sieved", "Long"]);
                 >
               </template>
             </MenuComponent>
-
-            <MenuComponent :listItems="listItems" menu-heading="New Menu">
-              <template #icon>
-                <IconCells />
-              </template>
-            </MenuComponent>
           </div>
         </div>
 
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <QueryHandler />
+          <QueryHandler :query="currentQueryInEditor" />
+          <div class="border-b sm:mt-16 border-gray-200">
+            <div class="flex items-center">
+              <span class="text-green-400 ml-3">
+                <IconCheck />
+              </span>
+              <span
+                class="px-2 py-2 border-b border-gray-100 uppercase text-gray-400 text-xs font-semibold"
+                @click="updateHeaders"
+                >Query Results</span
+              >
+            </div>
+          </div>
+          <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
+          <div class=" ">
+            <!-- <TableComponent :table-headers="tableHeaders" /> -->
+          </div>
         </div>
       </div>
     </main>

@@ -12,7 +12,9 @@
       <li
         v-for="(item, index) in props.listItems"
         :key="index"
+        :class="[activeMenuItem === index ? 'border-l-4  border-blue-700' : '']"
         class="cursor-pointer pl-4 py-2 flex items-center"
+        @click="handleClick({ item, index })"
       >
         <slot name="icon">
           <span
@@ -20,18 +22,31 @@
             >SQL</span
           >
         </slot>
-        <span class="ml-2 text-xs text-gray-700 font-medium">{{ item }}</span>
+        <span class="ml-2 text-xs w-3/4 text-gray-700 font-medium truncate">{{
+          item
+        }}</span>
       </li>
     </slot>
   </ul>
 </template>
 
 <script setup>
+import { computed, onMounted, ref } from "vue";
 const props = defineProps({
   listItems: {
     type: Array,
     default: () => [],
   },
   menuHeading: String,
+});
+const emit = defineEmits(["setItem"]);
+// const menuTitle = computed(() => props.listItems);
+const activeMenuItem = ref(null);
+const handleClick = (e) => {
+  emit("setItem", e);
+  activeMenuItem.value = e.index
+};
+onMounted(() => {
+  
 });
 </script>
