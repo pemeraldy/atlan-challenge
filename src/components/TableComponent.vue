@@ -38,7 +38,7 @@ onMounted(() => {
 
 <template>
   <div class="relative">
-    <div class="container flex justify-center mx-aut max-h-96">
+    <!-- <div class="container flex justify-center mx-aut max-h-96">
       <div class="flex flex-col w-full overflow-auto">
         <div class="w-full">
           <div class="border-b border-gray-200 shadow">
@@ -67,15 +67,15 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </div>
-    <!-- <ag-grid-vue
+    </div> -->
+    <ag-grid-vue
       :style="`width: 100%; height: ${computedTableHeight}`"
       class="ag-theme-alpine"
       :columnDefs="compheaderData"
       :rowData="tableData"
       overlayNoRowsTemplate="No data loaded yet, please select a table from left menu "
     >
-    </ag-grid-vue> -->
+    </ag-grid-vue>
     <div
       v-if="loadingQuery"
       class="absolute flex justify-center items-center inset-0 w-full bg-opacity-10 h-full bg-gray-700"

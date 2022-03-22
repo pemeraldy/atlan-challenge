@@ -104,8 +104,7 @@ const toggleEditor = () => {
 };
 
 // lifecycle hooks
-onBeforeMount(() =>{
-  setSelectedTable(3)
+onBeforeMount(() =>{  
 if (window.innerWidth < 700) {
     sideMenuVisible.value = false;
     toggleEditor();

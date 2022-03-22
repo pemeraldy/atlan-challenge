@@ -12,6 +12,15 @@ The developed data analyst  UI proposes that
 |:-:	|:-:	|:-:	|:-:	|
 |   5.55s  	|  2.57s 	|   	|
 |   	|   	|   	|   	|
+Page speed without optimization
+<image src="~/assets/imgs/perfomance/slowload.PNG"> </image>
+LightHouse result without optimization
+<image src="~/assets/imgs/perfomance/slow-state-2.PNG"> </image>
+Page speed with optimization
+<image src="~/assets/imgs/perfomance/test-grid-approach.PNG"> </image>
+LightHouse result with optimization
+<image src="~/assets/imgs/perfomance/test-grid-approach2"> </image>
+
 
 ## 1. Calculating page load time
 This was calculated using two methods:
@@ -25,12 +34,12 @@ This was calculated using two methods:
 Initially having to render a large amount of data on the table was indeed a costly task for the browser to paint that amount of dom elements, rendering a row of about 200000 will definitely cause a browser running on a strong CPU to lag if not crashing the browser tab.
 
 ## Solution
-The solution to this is to implement a virtual scrolling mechanism for that portion of the DOM, well I had started writing a Custom component to do that, but optimization and testing to be sure that this plugin/component will do the job accurately was going to take a lot of time so I decided to look for existing tools already built to solve this issue.
+The solution to this is to implement a virtual scrolling mechanism for that portion of the DOM to ensure that only the data that can be seen on the screen per time are rendered, well I had started writing a Custom component to do that, but trying optimize and testing to be sure that this plugin/component will do the job accurately was going to take a lot of time so I decided to look for existing tools already built to solve this issue.
 
 They are actually several tools to solve this issue, my first resolve was to use [vue3-virtual-scroller](https://www.npmjs.com/package/vue3-virtual-scroller), but I ran into some technical issues would have given it a deep dive to find the solution but the time I spent at work would not give me that luxury of time.
 This led to me opting for a more robust package [vue-ag-grid](https://www.ag-grid.com/vue-data-grid/getting-started/)
 
-This template should help get you started developing with Vue 3 in Vite.
+
 
 ## Recommended IDE Setup
 
