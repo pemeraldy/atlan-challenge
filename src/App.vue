@@ -15,10 +15,11 @@ import PlayIcon from "./components/icons/PlayIcon.vue";
 import { customers } from "../data/customers";
 import { categories } from "../data/categories";
 import { products } from "../data/products";
+import { orders } from "../data/orders";
 import FadeTransition from "./components/transitions/FadeTransition.vue";
 
-const alltables = [customers, categories, products];
-const tablesInMenu = ref(["Categories", "Customers", "Products"]);
+const alltables = [customers, categories, products, orders];
+const tablesInMenu = ref(["Categories", "Customers", "Products", "Orders"]);
 let selectedTable = ref(null);
 const sideMenuVisible = ref(true);
 const showEditor = ref(true);
@@ -103,7 +104,7 @@ const toggleEditor = () => {
 };
 
 // lifecycle hooks
-onBeforeMount(() =>{
+onBeforeMount(() =>{  
 if (window.innerWidth < 700) {
     sideMenuVisible.value = false;
     toggleEditor();
