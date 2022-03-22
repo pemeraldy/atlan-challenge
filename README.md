@@ -31,14 +31,15 @@ This led to me opting for a more robust package [vue-ag-grid](https://www.ag-gri
 
 
 Page speed without optimization
-![without optimization](../assets/imgs/perfomance/slowload.PNG)
-<!-- <image src="../assets/imgs/perfomance/slowload.PNG"> </image> -->
+![without optimization](https://github.com/pemeraldy/atlan-challenge/blob/master/src/assets/imgs/perfomance/slowload.PNG)
+
 LightHouse result without optimization
-<image src="../assets/imgs/perfomance/slow-state-2.PNG"> </image>
+![lighthouse without optimization](https://github.com/pemeraldy/atlan-challenge/blob/master/src/assets/imgs/perfomance/slow-state-2.PNG)
+
 Page speed with optimization
-<image src="../assets/imgs/perfomance/test-grid-approach.PNG"> </image>
+![with optimazation](https://github.com/pemeraldy/atlan-challenge/blob/master/src/assets/imgs/perfomance/test-grid-approach.PNG)
 LightHouse result with optimization
-<image src="../assets/imgs/perfomance/test-grid-approach2"> </image>
+![optimized](https://github.com/pemeraldy/atlan-challenge/blob/master/src/assets/imgs/perfomance/test-grid-approach2.PNG)
 
 
 ## Recommended IDE Setup
