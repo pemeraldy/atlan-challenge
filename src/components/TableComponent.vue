@@ -37,10 +37,14 @@ const compheaderData = computed(() => {
     };
   });
 });
-
+const computedTableHeight = ref('301px')
+const sideMenuVisible = ref(true)
 onMounted(() => {
-  console.log(compheaderData.value);
-  console.log("Table Data:", props.tableData);
+  // console.log(compheaderData.value);
+  console.log(window.innerWidth);
+  if(window.innerWidth < 700){
+    computedTableHeight.value = `${window.innerHeight - 90}px`
+  }
 });
 </script>
 
@@ -48,7 +52,7 @@ onMounted(() => {
   <div class="relative">
     <!-- <pre>{{ props }}</pre> -->
     <ag-grid-vue
-      style="width: 100%; height: 400px"
+      :style="`width: 100%; height: ${computedTableHeight}`"
       class="ag-theme-alpine"
       :columnDefs="compheaderData"
       :rowData="tableData"
