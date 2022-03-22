@@ -68,6 +68,9 @@ const runQuery = () => {
     isRunningQuery.value = false;
     if (!selectedTable.value) {
       selectedTable.value = alltables[0];
+      if(window.innerWidth < 700){
+        toggleTable()
+      }
     }
   }, 200);
 };
@@ -176,5 +179,11 @@ onMounted(() => {
         </div>
       </div>
     </main>
+    <div class="flex fixed bottom-0 py-2 px-4 w-full flex justify-between bg-gray-50">
+      <button @click="toggleTable" :class="[showTable ? 'text-[#1913a3]' : 'text-gray-400']" class="px-2 py-1 font-medium">Tables</button>
+      <button @click="toggleEditor" :class="[showEditor ? 'text-[#1913a3]' : 'text-gray-400']" class=" px-2 py-1 font-medium">Query</button>
+      <button @click="runQuery"  class=" text-green-600 px-2 py-1 font-medium">Run Query</button>
+
+    </div>
   </div>
 </template>
