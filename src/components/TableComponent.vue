@@ -3,27 +3,17 @@ import { ref, onMounted, computed } from "vue";
 import { AgGridVue } from "ag-grid-vue3";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-const columnDefs = [
-  { headerName: "Make", field: "make" },
-  { headerName: "Model", field: "model" },
-  { headerName: "Price", field: "price" },
-];
 
-const rowData = [
-  { make: "Toyota", model: "Celica", price: 35000 },
-  { make: "Ford", model: "Mondeo", price: 32000 },
-  { make: "Porsche", model: "Boxter", price: 72000 },
-];
 const props = defineProps({
   tableHeaders: {
     type: Array,
-    default: () => ["Product Name", "Category", "Price", "Action"],
+    default: () => [],
   },
   tableData: {
     type: Array,
     default: () => [],
   },
-  loadingQuery:Boolean
+  loadingQuery: Boolean,
 });
 const compheaderData = computed(() => {
   const titles = props.tableData[0];
@@ -37,17 +27,47 @@ const compheaderData = computed(() => {
     };
   });
 });
-const computedTableHeight = ref('301px')
+const computedTableHeight = ref("301px");
 // const sideMenuVisible = ref(true)
 onMounted(() => {
-  if(window.innerWidth < 700){
-    computedTableHeight.value = `${window.innerHeight - 90}px`
+  if (window.innerWidth < 700) {
+    computedTableHeight.value = `${window.innerHeight - 90}px`;
   }
 });
 </script>
 
 <template>
-  <div class="relative">    
+  <div class="relative">
+    <div class="container flex justify-center mx-aut max-h-96">
+      <div class="flex flex-col w-full overflow-auto">
+        <div class="w-full">
+          <div class="border-b border-gray-200 shadow">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-2 text-xs text-gray-500">ID</th>
+                  <th class="px-6 py-2 text-xs text-gray-500">Name</th>
+                  <th class="px-6 py-2 text-xs text-gray-500">Email</th>
+                  <th class="px-6 py-2 text-xs text-gray-500">Created_at</th>
+                  <th class="px-6 py-2 text-xs text-gray-500">Edit</th>
+                  <th class="px-6 py-2 text-xs text-gray-500">Delete</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white">
+                <tr v-for="(data,index) in tableData" :key="index" class="whitespace-nowrap">
+                  <td
+                    v-for="(item, index) in data" :key="index"
+                    class="px-6 py-4 text-sm text-gray-500"
+                  >
+                    {{ item }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- <ag-grid-vue
       :style="`width: 100%; height: ${computedTableHeight}`"
       class="ag-theme-alpine"
@@ -56,7 +76,10 @@ onMounted(() => {
       overlayNoRowsTemplate="No data loaded yet, please select a table from left menu "
     >
     </ag-grid-vue> -->
-    <div v-if="loadingQuery" class="absolute flex justify-center items-center inset-0 w-full bg-opacity-10 h-full bg-gray-700">
+    <div
+      v-if="loadingQuery"
+      class="absolute flex justify-center items-center inset-0 w-full bg-opacity-10 h-full bg-gray-700"
+    >
       <svg
         role="status"
         class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
