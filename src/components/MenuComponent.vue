@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 const props = defineProps({
   listItems: {
     type: Array,
@@ -39,11 +39,11 @@ const props = defineProps({
   },
   menuHeading: String,
 });
-const emit = defineEmits(["setItem"]);
-// const menuTitle = computed(() => props.listItems);
+const emit = defineEmits(["handleActions"]);
+
 const activeMenuItem = ref(null);
-const handleClick = (e) => {
-  emit("setItem", e);
+const handleClick = (e) => {  
+  emit("handleActions", e);  
   activeMenuItem.value = e.index
 };
 onMounted(() => {
