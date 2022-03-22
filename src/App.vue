@@ -1,24 +1,28 @@
 <script setup>
-import { ref, onMounted, computed, reactive } from "vue";
+import { ref, onMounted, computed, onBeforeMount, reactive } from "vue";
 import IconCells from "./components/icons/IconCells.vue";
 import QueryHandler from "./components/QueryHandler.vue";
 import MenuComponent from "./components/MenuComponent.vue";
 import TableComponent from "./components/TableComponent.vue";
 import IconCheck from "./components/icons/IconCheck.vue";
-
-// Data
-import { customers } from "../data/customers";
-import { categories } from "../data/categories";
-import { products } from "../data/products";
 import AtlanLogo from "./components/icons/AtlanLogo.vue";
 import BurgerMenu from "./components/icons/BurgerMenu.vue";
 import TableIcon from "./components/icons/TableIcon.vue";
 import CodeIcon from "./components/icons/CodeIcon.vue";
 import PlayIcon from "./components/icons/PlayIcon.vue";
+
+// Data
+import { customers } from "../data/customers";
+import { categories } from "../data/categories";
+import { products } from "../data/products";
+import FadeTransition from "./components/transitions/FadeTransition.vue";
+
 const alltables = [customers, categories, products];
 const tablesInMenu = ref(["Categories", "Customers", "Products"]);
 let selectedTable = ref(null);
 const sideMenuVisible = ref(true);
+const showEditor = ref(true);
+const showTable = ref(true);
 const isMobile = computed(() => {
   return window.innerWidth < 700;
 });
@@ -55,6 +59,10 @@ const savedQueryMenuTitles = computed(() => {
 // Functions
 const handleTables = (e) => {
   isRunningQuery.value = true;
+  if (isMobile.value) {
+    sideMenuVisible.value = false;
+    toggleTable();
+  }
   setTimeout(() => {
     setSelectedTable(e.index);
     isRunningQuery.value = false;
@@ -68,21 +76,20 @@ const loadQuery = (e) => {
 };
 
 const isRunningQuery = ref(false);
+
 const runQuery = () => {
   isRunningQuery.value = true;
+  if (isMobile.value) {
+    toggleTable();
+  }
   setTimeout(() => {
-    isRunningQuery.value = false;
     if (!selectedTable.value) {
       selectedTable.value = alltables[0];
-      if (isMobile.value < 700) {
-        toggleTable();
-      }
     }
+
+    isRunningQuery.value = false;
   }, 200);
 };
-
-const showEditor = ref(true);
-const showTable = ref(true);
 
 const toggleTable = () => {
   showEditor.value = false;
@@ -96,15 +103,18 @@ const toggleEditor = () => {
 };
 
 // lifecycle hooks
+onBeforeMount(() =>{
+if (window.innerWidth < 700) {
+    sideMenuVisible.value = false;
+    toggleEditor();
+  }
+})
 onMounted(() => {
   // if saved queries are available, load the first
   if (savedQueryMenuTitles.value.length > 0) {
     currentQueryInEditor.value = savedQueries[0].queryContent;
   }
-  if (window.innerWidth < 700) {
-    sideMenuVisible.value = false;
-    toggleEditor();
-  }
+  
 });
 </script>
 
@@ -128,44 +138,56 @@ onMounted(() => {
       </nav>
       <div class="flex bg-gray-50 h-full">
         <!-- sidebar -->
-        <div
-          v-if="sideMenuVisible"
-          class="sm:block sm:w-[250px] sm:max-w-[250px] border-r border-gray-300"
+        <transition
+          enter-active-class="duration-300 ease-out"
+          enter-from-class="transform -translate-x-10"
+          enter-to-class="opacity-100"
+          leave-active-class="duration-200 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="transform opacity-0 -translate-x-10"
         >
-          <div class="flex flex-col items-center">
-            <MenuComponent
-              menu-heading="Tables"
-              :list-items="tablesInMenu"
-              @handle-actions="handleTables"
-            >
-              <template #icon>
-                <IconCells />
-              </template>
-            </MenuComponent>
+          <div
+            v-if="sideMenuVisible"
+            class="sm:block sm:w-[250px] sm:max-w-[250px] border-r border-gray-300"
+          >
+            <div class="flex flex-col items-center">
+              <MenuComponent
+                menu-heading="Tables"
+                :list-items="tablesInMenu"
+                @handle-actions="handleTables"
+              >
+                <template #icon>
+                  <IconCells />
+                </template>
+              </MenuComponent>
 
-            <!-- Saved queries -->
-            <MenuComponent
-              menu-heading="Saved Queries"
-              :list-items="savedQueryMenuTitles"
-              @handle-actions="loadQuery"
-            >
-              <template #icon>
-                <span
-                  class="py-[2px] px-[3px] rounded text-[8px] font-semibold bg-orange-500 text-white"
-                  >SQL</span
-                >
-              </template>
-            </MenuComponent>
+              <!-- Saved queries -->
+              <MenuComponent
+                menu-heading="Saved Queries"
+                :list-items="savedQueryMenuTitles"
+                @handle-actions="loadQuery"
+              >
+                <template #icon>
+                  <span
+                    class="py-[2px] px-[3px] rounded text-[8px] font-semibold bg-orange-500 text-white"
+                    >SQL</span
+                  >
+                </template>
+              </MenuComponent>
+            </div>
           </div>
-        </div>
+        </transition>
 
         <!-- rest content -->
         <div class="flex-1 bg-white">
-          <QueryHandler
-            v-if="showEditor"
-            @runQuery="runQuery"
-            :query="currentQueryInEditor"
-          />
+          <FadeTransition>
+            <QueryHandler
+              v-if="showEditor"
+              @runQuery="runQuery"
+              :query="currentQueryInEditor"
+            />
+          </FadeTransition>
+
           <div v-if="showTable" class="border-b sm:mt-16 border-gray-200">
             <div class="flex items-center">
               <span class="text-green-400 ml-3">
@@ -177,13 +199,22 @@ onMounted(() => {
               >
             </div>
           </div>
-          <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
-          <div v-if="showTable" class="overflow-hidden">
-            <TableComponent
-              :loadingQuery="isRunningQuery"
-              :tableData="loadedTable"
-            />
-          </div>
+          <transition
+            enter-active-class="duration-300 ease-out"
+            enter-from-class="transform opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="duration-200 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="transform opacity-0"
+          >
+            <!-- sm:max-h-screen overflow-x-hidden  overflow-y-auto -->
+            <div v-if="showTable" class="overflow-hidden">
+              <TableComponent
+                :loadingQuery="isRunningQuery"
+                :tableData="loadedTable"
+              />
+            </div>
+          </transition>
         </div>
       </div>
     </main>
@@ -191,36 +222,45 @@ onMounted(() => {
       v-if="isMobile"
       class="flex fixed bottom-0 py-2 px-5 w-full flex justify-between bg-transparent"
     >
-      <div class="w-full bg-gray-50 rounded-sm flex justify-between">
-      <button
-        @click="toggleTable"
-        :class="[showTable ? 'text-[#1913a3]' : 'text-gray-400']"
-        class="flex flex-col items-center justify-center px-2 py-1 font-medium"
-      >
-        <span>
-          <TableIcon />
-        </span>
-        <span class="text-xs">Tables</span>
-      </button>
-      <button
-        @click="toggleEditor"
-        :class="[showEditor ? 'text-[#1913a3]' : 'text-gray-400']"
-        class="flex flex-col items-center justify-center px-2 py-1 font-medium"
-      >
-        <span>
-          <CodeIcon />
-        </span>
-        <span class="text-xs">Query</span>
-      </button>
-      <button
-        @click="runQuery"
-        class="flex flex-col justify-center items-center text-green-600 px-2 py-1 font-medium"
-      >
-        <span>
-          <PlayIcon />
-        </span>
-        <span class="text-xs"> Run Query </span>
-      </button>
+      <div class="w-full shadow-lg bg-gray-50 rounded-sm flex justify-between">
+        <button
+          @click="sideMenuVisible = !sideMenuVisible"
+          class="flex flex-col items-center justify-center px-2 py-1 font-medium"
+        >
+          <span>
+            <BurgerMenu />
+          </span>
+          <span class="text-xs">Menu</span>
+        </button>
+        <button
+          @click="toggleTable"
+          :class="[showTable ? 'text-[#1913a3]' : 'text-gray-400']"
+          class="flex flex-col items-center justify-center px-2 py-1 font-medium"
+        >
+          <span>
+            <TableIcon />
+          </span>
+          <span class="text-xs">Tables</span>
+        </button>
+        <button
+          @click="toggleEditor"
+          :class="[showEditor ? 'text-[#1913a3]' : 'text-gray-400']"
+          class="flex flex-col items-center justify-center px-2 py-1 font-medium"
+        >
+          <span>
+            <CodeIcon />
+          </span>
+          <span class="text-xs">Query</span>
+        </button>
+        <button
+          @click="runQuery"
+          class="flex flex-col justify-center items-center text-green-600 px-2 py-1 font-medium"
+        >
+          <span>
+            <PlayIcon />
+          </span>
+          <span class="text-xs"> Run Query </span>
+        </button>
       </div>
     </div>
   </div>

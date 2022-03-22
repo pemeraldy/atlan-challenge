@@ -38,10 +38,8 @@ const compheaderData = computed(() => {
   });
 });
 const computedTableHeight = ref('301px')
-const sideMenuVisible = ref(true)
+// const sideMenuVisible = ref(true)
 onMounted(() => {
-  // console.log(compheaderData.value);
-  console.log(window.innerWidth);
   if(window.innerWidth < 700){
     computedTableHeight.value = `${window.innerHeight - 90}px`
   }
