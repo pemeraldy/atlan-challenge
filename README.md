@@ -5,6 +5,7 @@ The developed data analyst  UI proposes that
 2. Tables can be selected to display data in a tabular form
 3. Queries can be typed in an elegant code editor
 4. Queries typed can be run to generate data in a tabular form
+5. The app has the ability to render a very large data of about 1000000 rows and 1000000 columns in a tabular form without lagging or crashing the browser page.
 
 
 ## Q1. Calculate the page load time of your app. Write the page load time in README. Also, write, how did you calculate the page load time of the app.
