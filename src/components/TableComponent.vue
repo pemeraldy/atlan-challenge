@@ -47,16 +47,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative">
-    <!-- <pre>{{ props }}</pre> -->
-    <ag-grid-vue
+  <div class="relative">    
+    <!-- <ag-grid-vue
       :style="`width: 100%; height: ${computedTableHeight}`"
       class="ag-theme-alpine"
       :columnDefs="compheaderData"
       :rowData="tableData"
       overlayNoRowsTemplate="No data loaded yet, please select a table from left menu "
     >
-    </ag-grid-vue>
+    </ag-grid-vue> -->
     <div v-if="loadingQuery" class="absolute flex justify-center items-center inset-0 w-full bg-opacity-10 h-full bg-gray-700">
       <svg
         role="status"
